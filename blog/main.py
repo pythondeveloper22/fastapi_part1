@@ -26,11 +26,11 @@ def get_db():
 # save data
 @app.post("/", status_code=status.HTTP_201_CREATED, tags=["Blogs"])
 def create_blog(request: schemas.Blog,db: Session = Depends(get_db)):
-    new_blog = models.Blog(id=request.id,title=request.title, body=request.body)
-    db.add(new_blog)
+    new_blogs = models.Blog(id=request.id,title=request.title, body=request.body)
+    db.add(new_blogs)
     db.commit()
-    db.refresh(new_blog)
-    return new_blog
+    db.refresh(new_blogs)
+    return new_blogs
 
 # get all data
 @app.get("/blog", response_model= List[schemas.Blogblog], tags=["Blogs"])
