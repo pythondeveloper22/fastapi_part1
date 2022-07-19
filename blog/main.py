@@ -26,7 +26,9 @@ def get_db():
 # save data
 @app.post("/", status_code=status.HTTP_201_CREATED, tags=["Blogs"])
 def create_blog(request: schemas.Blog,db: Session = Depends(get_db)):
-    new_blogs = models.Blog(id=request.id,title=request.title, body=request.body)
+    # new_blogs = models.Blog(id=request.id,title=request.title, body=request.body)
+    new_blogs = models.Blog(id=request.id,title=request.title, body=request.body, user_id=1)
+
     db.add(new_blogs)
     db.commit()
     db.refresh(new_blogs)
@@ -38,7 +40,21 @@ def all(db: Session = Depends(get_db)):
     blog = db.query(models.Blog).all()
     return blog 
 # get data by id 
-@app.get("/blog/{id}", response_model=schemas.Blog, tags=["Blogs"])
+'''
+@app.get("/blog/{id}", tags=["Blogs"])
+def get_by_id(response: Response, id, db: Session = Depends(get_db)):
+    blog = db.query(models.Blog).filter(models.Blog.id == id).first()
+    if not blog:
+        raise HTTPException(status_code=404, detail=f'blog with {id} not available ')
+        # response.status_code = status.HTTP_404_NOT_FOUND
+        # return {"details": f'blog with {id} not available '}
+    return blog
+
+'''
+
+
+
+@app.get("/blog/{id}",response_model=schemas.ShowBlog, tags=["Blogs"])
 def get_by_id(response: Response, id, db: Session = Depends(get_db)):
     blog = db.query(models.Blog).filter(models.Blog.id == id).first()
     if not blog:
