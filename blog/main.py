@@ -108,10 +108,10 @@ def create_user(request: schemas.User,db: Session = Depends(get_db)):
 
 @app.get("/user/{id}", response_model=schemas.ShowUser, tags=["Users"])
 def get_user(id: int, db: Session = Depends(get_db)):
-    user = db.query(models.User).filter(models.User.id == id).first()
-    if not user:
+    users = db.query(models.User).filter(models.User.id == id).first()
+    if not users:
         raise HTTPException(status_code=404, detail=f'user with {id} not available ')
         # response.status_code = status.HTTP_404_NOT_FOUND
         # return {"details": f'blog with {id} not available '}
-    return user
+    return users
 
